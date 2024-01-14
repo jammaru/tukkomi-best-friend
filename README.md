@@ -4,7 +4,7 @@
 https://platform.openai.com/api-keys
 
 # その2
-python app.pyを実行
+`python app.py`を実行
 
 # その3
 サーバーが開くのでそれを開いて実行する。
