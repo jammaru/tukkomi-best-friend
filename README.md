@@ -1,5 +1,5 @@
 # その1
-まず、`pip install requirements.txt` をする。
+まず、`pip install -r requirements.txt` をする。
 その次に .env.exmple を.envに変更してOPENAIのAPI keyを入力してください。APIkeyはこちらで入手することが出来ます。
 https://platform.openai.com/api-keys
 
