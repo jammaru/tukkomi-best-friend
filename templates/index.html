@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flask Chatbot</title>
+</head>
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 0;
+        font-family: 'Noto Sans', sans-serif; /* Noto Sansを指定 */
+    }
+    
+    div {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+    }
+    
+    h1 {
+        color: #333;
+        text-align: center; /* 中央に配置 */
+    }
+    
+    p {
+        color: #666;
+        text-align: center; /* 中央に配置 */
+    }
+    
+    form {
+        margin-top: 20px;
+    }
+    
+    textarea {
+        width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        resize: vertical;
+        font-family: 'Noto Sans', sans-serif; /* Noto Sansを指定 */
+    }
+    
+    .btn-emergency {
+        position: relative;
+        display: block;
+        width: 200px;
+        height: 130px;
+        margin: 0 auto;
+    }
+    
+    .btn-emergency:hover .btn-emergency-top {
+        top: 10px;
+        height: 50px;
+    }
+    
+    .btn-emergency:active .btn-emergency-top {
+        top: 20px;
+        height: 40px;
+    }
+    
+    .btn-emergency-top {
+        position: absolute;
+        top: 0;
+        left: 20px;
+        width: 160px;
+        height: 60px;
+        margin-top: 30px;
+        transition: all 0.3s;
+        border-radius: 0 0 50% 50%;
+        background: #d62d2d;
+    }
+    
+    .btn-emergency-top:before {
+        position: absolute;
+        top: -30px;
+        left: 0;
+        width: 160px;
+        height: 60px;
+        content: "";
+        border-radius: 80px / 30px;
+        background: #ed4c4c;
+    }
+    
+    .btn-emergency-top span {
+        font-size: 38px;
+        font-weight: bold;
+        position: absolute;
+        top: -24px;
+        left: 0;
+        width: 100%;
+        transform: scaleY(0.75);
+        text-align: center;
+        color: #f6a3a3;
+    }
+    
+    .btn-emergency-bottom {
+        position: absolute;
+        top: 38px;
+        left: 0;
+        width: 200px;
+        height: 80px;
+        border-radius: 100px / 40px;
+        background: #d8e4ea;
+        box-shadow: 0 8px 0 #c4cacc;
+    }
+    
+    button {
+        background-color: #4caf50;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        display: block;
+        margin: 0 auto;
+        font-family: 'Noto Sans', sans-serif; /* Noto Sansを指定 */
+    }
+    
+    button:hover {
+        background-color: #45a049;
+    }
+    
+    #loading {
+        display: none;
+        color: #888;
+        text-align: center;
+        margin-top: 10px;
+    }
+    
+    #loading img {
+        margin: auto;
+        display: block;
+    }
+    #tukkomi img {
+        margin: auto;
+        display: block;
+    }
+    
+    #result {
+        white-space: pre-wrap;
+        font-family: 'Noto Sans', sans-serif; /* Noto Sansを指定 */
+        color: #333;
+    }
+</style>
+<body>
+    <div>
+        <div>
+            <div>
+                <div id="tukkomi" >
+                    <img src="https://bit.ly/3vy7i6L" alt="ツッコミの友" height=60 width=auto />
+                </div>
+                
+                <p>自由にボケてください。<br> このBotは何処でも何時でも貴方のボケにツッコんでくれる友です。<br> いつでもどこでもあなたのボケに対して突っ込んでくれる貴方の相方です!</p>
+                <form id="create-text-form">
+                    <div>
+                        <textarea id="message" name="message" rows="3" placeholder="ここにボケるコメントを書く" required></textarea>
+                    </div>
+                    <a class="btn-emergency" onclick="sendMessage()">
+                        <span class="btn-emergency-bottom"></span>
+                        <span class="btn-emergency-top"><span>送信</span></span>
+                    </a>
+
+                </form>
+                <div id="loading" style="display:none;">
+                    <img src="https://bit.ly/47xVqif" alt="Loading..." height=300 width=300  />
+                </div>
+                <pre id="result"></pre>
+            </div>
+        </div>
+    </div>
+    <script>
+        function sendMessage() {
+            var loading = document.getElementById('loading');
+            var result = document.getElementById('result');
+            var message = document.getElementById('message').value;
+
+            loading.style.display = 'flex';
+            result.textContent = '';
+
+            fetch('/create_text', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'message=' + encodeURIComponent(message)
+            })
+            .then(response => response.json())
+            .then(data => {
+                loading.style.display = 'none';
+                result.innerHTML = data.message;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                loading.style.display = 'none';
+            });
+        }
+        document.addEventListener('contextmenu', event => event.preventDefault());
+            </script>
+            <script>
+        document.addEventListener('dragstart', event => event.preventDefault());
+    </script>
+    
+</body>
+</html>
